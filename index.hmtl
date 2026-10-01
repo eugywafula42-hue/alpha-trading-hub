@@ -2,637 +2,527 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Deriv Bot Dashboard · free</title>
-    <!-- FontAwesome for icons, minimal & free -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Free Bots · Deriv Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
 
         body {
-            background: #0b0e14;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            background: #f7f9fc;
+            color: #101828;
+            padding-bottom: 100px; /* space for bottom bar */
             min-height: 100vh;
-            padding: 1.5rem;
         }
 
-        .dashboard {
-            max-width: 1200px;
-            width: 100%;
-            background: #141a24;
-            border-radius: 2rem;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.03);
-            padding: 2rem 2rem 2rem 2rem;
-            transition: all 0.2s;
-            border: 1px solid #2a3440;
-        }
-
-        /* header */
-        .header {
+        /* ---------- HEADER ---------- */
+        .top-nav {
+            background: #ffffff;
+            padding: 14px 18px;
             display: flex;
-            flex-wrap: wrap;
+            align-items: center;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-            gap: 1rem;
+            border-bottom: 1px solid #eef1f6;
+            position: sticky;
+            top: 0;
+            z-index: 50;
         }
 
-        .logo-area {
+        .nav-left {
             display: flex;
             align-items: center;
-            gap: 0.75rem;
+            gap: 12px;
         }
 
-        .logo-icon {
-            background: #00d4aa;
-            width: 42px;
-            height: 42px;
-            border-radius: 14px;
+        .menu-icon {
+            font-size: 20px;
+            color: #344054;
+            cursor: pointer;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 700;
+            font-size: 16px;
+            color: #1d2939;
+        }
+
+        .brand-icon {
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, #6d5efc, #4f46e5);
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 8px 20px -8px #00d4aa80;
+            color: #fff;
+            font-size: 12px;
         }
 
-        .logo-icon i {
-            font-size: 1.8rem;
-            color: #0b0e14;
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        .logo-text h1 {
-            font-size: 1.7rem;
+        .login-link {
+            color: #344054;
             font-weight: 600;
-            letter-spacing: -0.02em;
-            color: #f0f4fa;
-            line-height: 1.2;
+            font-size: 14px;
+            text-decoration: none;
+            padding: 8px 12px;
         }
 
-        .logo-text .badge {
-            font-size: 0.7rem;
-            font-weight: 500;
-            background: #1e2a36;
-            color: #9aa8b9;
-            padding: 0.2rem 0.7rem;
-            border-radius: 40px;
-            display: inline-block;
-            margin-top: 2px;
-            border: 1px solid #2f3d4c;
-        }
-
-        .status-pill {
-            background: #0f1a1f;
-            border-radius: 60px;
-            padding: 0.45rem 1.1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
-            border: 1px solid #2b3b46;
-            box-shadow: inset 0 2px 4px #00000030;
-        }
-
-        .status-dot {
-            width: 10px;
-            height: 10px;
-            background: #00d4aa;
-            border-radius: 50%;
-            box-shadow: 0 0 10px #00d4aa;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { opacity: 0.8; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.1); }
-            100% { opacity: 0.8; transform: scale(1); }
-        }
-
-        .status-pill span {
-            color: #b6c8da;
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-
-        /* add bot panel */
-        .add-bot-section {
-            background: #0f151e;
-            border-radius: 1.5rem;
-            padding: 1.5rem 1.8rem;
-            margin-bottom: 2.2rem;
-            border: 1px solid #25313d;
-            box-shadow: 0 10px 20px -10px #00000050;
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: space-between;
-            gap: 1rem;
-        }
-
-        .add-bot-section .label-group {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .add-bot-section .label-group i {
-            font-size: 1.4rem;
-            color: #00d4aa;
-            background: #0a1c1a;
-            padding: 0.5rem;
-            border-radius: 12px;
-            width: 46px;
-            text-align: center;
-        }
-
-        .add-bot-section .label-group h3 {
-            font-size: 1.2rem;
-            font-weight: 500;
-            color: #e3eaf2;
-        }
-
-        .add-bot-section .label-group p {
-            color: #7b8a9b;
-            font-size: 0.85rem;
-            margin-top: 2px;
-        }
-
-        .input-cluster {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            flex-wrap: wrap;
-        }
-
-        .input-cluster input {
-            background: #1d2733;
-            border: 1px solid #2e3d4b;
-            border-radius: 60px;
-            padding: 0.85rem 1.4rem;
-            font-size: 0.95rem;
-            color: #f0f4fa;
-            width: 240px;
-            outline: none;
-            transition: all 0.2s;
-            font-weight: 400;
-        }
-
-        .input-cluster input::placeholder {
-            color: #5d6f82;
-            font-weight: 400;
-        }
-
-        .input-cluster input:focus {
-            border-color: #00d4aa;
-            box-shadow: 0 0 0 3px #00d4aa20;
-            background: #1a2531;
-        }
-
-        .btn-primary {
-            background: #00d4aa;
-            border: none;
-            border-radius: 60px;
-            padding: 0.85rem 1.8rem;
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: #0b0e14;
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
+        .signup-btn {
+            background: #ffffff;
+            color: #4f46e5;
+            border: 2px solid #4f46e5;
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 14px;
             cursor: pointer;
-            transition: all 0.2s;
-            box-shadow: 0 8px 18px -6px #00d4aa70;
-            white-space: nowrap;
-            border: 1px solid #00e6bb;
+            transition: 0.2s;
+            text-decoration: none;
         }
 
-        .btn-primary i {
-            font-size: 1rem;
+        .signup-btn:hover {
+            background: #4f46e5;
+            color: #fff;
         }
 
-        .btn-primary:hover {
-            background: #00e6bb;
-            transform: scale(1.02);
-            box-shadow: 0 12px 24px -8px #00d4aa;
-        }
-
-        .btn-primary:active {
-            transform: scale(0.98);
-        }
-
-        /* bot grid */
-        .bot-grid-header {
+        /* ---------- TABS ---------- */
+        .tabs {
             display: flex;
-            justify-content: space-between;
+            gap: 10px;
+            padding: 16px 18px;
+            overflow-x: auto;
+            background: #ffffff;
+            border-bottom: 1px solid #eef1f6;
+            scrollbar-width: none;
+        }
+
+        .tabs::-webkit-scrollbar { display: none; }
+
+        .tab {
+            display: flex;
             align-items: center;
-            margin-bottom: 1.2rem;
-            padding: 0 0.25rem;
+            gap: 6px;
+            padding: 10px 18px;
+            border-radius: 30px;
+            background: #fff;
+            border: 1.5px solid #e4e7ec;
+            color: #344054;
+            font-size: 14px;
+            font-weight: 600;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: 0.2s;
         }
 
-        .bot-grid-header h2 {
-            font-size: 1.3rem;
-            font-weight: 500;
-            color: #d0dceb;
-            letter-spacing: -0.01em;
+        .tab.active {
+            background: #eef2ff;
+            border-color: #4f46e5;
+            color: #4f46e5;
         }
 
-        .bot-grid-header h2 i {
-            color: #00d4aa;
-            margin-right: 0.5rem;
+        .tab i { font-size: 13px; }
+
+        /* ---------- HERO ---------- */
+        .hero {
+            padding: 20px 18px 10px;
         }
 
-        .bot-count {
-            background: #1d2733;
-            border-radius: 40px;
-            padding: 0.3rem 1rem;
-            font-size: 0.85rem;
-            color: #9bb0c5;
-            border: 1px solid #2d3b48;
-            font-weight: 500;
+        .hero h1 {
+            font-size: 24px;
+            font-weight: 800;
+            color: #1d2939;
+            margin-bottom: 4px;
         }
 
-        .bot-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 1.2rem;
-            margin-top: 0.5rem;
-            min-height: 180px;
+        .hero h2 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #475467;
+            margin-bottom: 6px;
+        }
+
+        .hero p {
+            font-size: 13.5px;
+            color: #667085;
+            line-height: 1.5;
+            max-width: 90%;
+        }
+
+        /* ---------- BOT CARDS ---------- */
+        .bot-list {
+            padding: 12px 18px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
         }
 
         .bot-card {
-            background: #10171f;
-            border-radius: 1.3rem;
-            padding: 1.4rem 1.3rem 1.3rem 1.3rem;
-            border: 1px solid #26323f;
-            box-shadow: 0 6px 14px -6px #00000060;
-            transition: all 0.2s;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            backdrop-filter: blur(2px);
+            background: #ffffff;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(16, 24, 40, 0.06);
+            border: 1px solid #f0f2f5;
+            transition: transform 0.2s;
         }
 
         .bot-card:hover {
-            border-color: #2f4050;
-            background: #131c26;
             transform: translateY(-2px);
-            box-shadow: 0 18px 28px -12px #00000090;
         }
 
-        .bot-card .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 1rem;
-        }
-
-        .bot-card .card-header .bot-name {
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
-        }
-
-        .bot-card .card-header .bot-name i {
-            color: #00d4aa;
-            background: #0d211f;
-            padding: 0.5rem;
-            border-radius: 12px;
-            font-size: 1rem;
-            width: 36px;
-            text-align: center;
-            border: 1px solid #1f3a35;
-        }
-
-        .bot-card .card-header .bot-name h3 {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: #eef3f9;
-            word-break: break-word;
-            max-width: 150px;
-        }
-
-        .bot-card .card-header .bot-actions {
-            display: flex;
-            gap: 0.4rem;
-        }
-
-        .icon-btn {
-            background: #1b2531;
-            border: none;
-            border-radius: 10px;
-            width: 32px;
-            height: 32px;
+        .bot-image {
+            position: relative;
+            height: 220px;
+            background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #8b9eb1;
-            cursor: pointer;
-            transition: all 0.15s;
-            border: 1px solid #2b3847;
-            font-size: 0.8rem;
+            overflow: hidden;
         }
 
-        .icon-btn:hover {
-            background: #263542;
-            color: #d3e2f0;
-            border-color: #3e5568;
+        .bot-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
-        .icon-btn.delete-btn:hover {
-            background: #3a1f28;
-            color: #ff7a8b;
-            border-color: #6b3a47;
+        /* fallback robot art */
+        .bot-image .robot-art {
+            font-size: 80px;
+            color: rgba(255,255,255,0.7);
         }
 
-        .bot-meta {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.6rem 1rem;
-            font-size: 0.75rem;
-            color: #7a8ea3;
-            margin: 0.7rem 0 0.2rem 0;
-            border-top: 1px solid #1d2936;
-            padding-top: 0.9rem;
-            margin-top: auto;
+        .badge-tl {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            background: rgba(255,255,255,0.95);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            color: #b54708;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
 
-        .bot-meta span {
+        .badge-tr {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            background: #1d2939;
+            color: #fff;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .bot-body {
+            padding: 16px;
+        }
+
+        .bot-tag {
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.8px;
+            color: #b54708;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .bot-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1d2939;
+            margin-bottom: 12px;
+        }
+
+        .unlock-btn {
+            width: 100%;
+            background: linear-gradient(90deg, #b45309, #d97706);
+            color: #fff;
+            border: none;
+            padding: 14px;
+            border-radius: 14px;
+            font-size: 14px;
+            font-weight: 700;
             display: flex;
             align-items: center;
-            gap: 0.35rem;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 4px 12px rgba(180, 83, 9, 0.3);
         }
 
-        .bot-meta i {
-            font-size: 0.7rem;
-            color: #00d4aa;
+        .unlock-btn:hover {
+            filter: brightness(1.05);
+            transform: scale(1.01);
         }
 
-        .empty-state {
-            grid-column: 1 / -1;
+        /* second card variant */
+        .bot-card.v2 .badge-tl {
+            background: rgba(255,255,255,0.95);
+            color: #b42318;
+        }
+
+        .bot-card.v2 .bot-image {
+            background: linear-gradient(135deg, #fce7f3, #e9d5ff);
+        }
+
+        .bot-card.v2 .bot-tag {
+            color: #b42318;
+        }
+
+        /* ---------- BOTTOM RUN BAR ---------- */
+        .run-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #ffffff;
+            padding: 12px 16px;
+            border-top: 1px solid #eef1f6;
+            box-shadow: 0 -4px 20px rgba(16, 24, 40, 0.06);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 100;
+        }
+
+        .run-btn {
+            background: #14b8a6;
+            color: #fff;
+            border: none;
+            padding: 12px 22px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .run-btn:hover { background: #0d9488; }
+
+        .speed-pill {
+            background: #ecfdf5;
+            border: 1.5px solid #14b8a6;
+            border-radius: 12px;
+            padding: 8px 12px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            padding: 3rem 2rem;
-            background: #10171f;
-            border-radius: 1.5rem;
-            border: 1px dashed #2b3d4b;
-            color: #6a7e94;
-            text-align: center;
+            min-width: 70px;
         }
 
-        .empty-state i {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            color: #2d4052;
+        .speed-pill .label {
+            font-size: 8px;
+            font-weight: 800;
+            color: #14b8a6;
+            letter-spacing: 0.5px;
         }
 
-        .empty-state p {
-            font-size: 1rem;
-            max-width: 300px;
+        .speed-pill .value {
+            font-size: 13px;
+            font-weight: 800;
+            color: #065f46;
         }
 
-        .empty-state .small-note {
-            font-size: 0.8rem;
-            color: #4d6275;
-            margin-top: 0.5rem;
-        }
-
-        /* toast notification (subtle) */
-        .toast-message {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #1d2b36;
-            backdrop-filter: blur(10px);
-            color: #e3f0fa;
-            padding: 0.8rem 1.8rem;
-            border-radius: 60px;
-            font-size: 0.9rem;
-            border: 1px solid #00d4aa50;
-            box-shadow: 0 20px 35px -10px #000000;
-            opacity: 0;
-            transition: opacity 0.2s;
-            pointer-events: none;
-            z-index: 999;
+        .status-area {
+            flex: 1;
             display: flex;
-            align-items: center;
-            gap: 0.6rem;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 4px;
         }
 
-        .toast-message.show {
-            opacity: 1;
+        .status-text {
+            font-size: 13px;
+            font-weight: 700;
+            color: #475467;
         }
 
-        .toast-message i {
-            color: #00d4aa;
+        .progress-dots {
+            display: flex;
+            gap: 6px;
         }
 
-        /* responsive */
-        @media (max-width: 700px) {
-            .dashboard {
-                padding: 1.5rem;
+        .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #d0d5dd;
+        }
+
+        .dot.active {
+            background: #14b8a6;
+            width: 18px;
+            border-radius: 4px;
+        }
+
+        /* ---------- RESPONSIVE ---------- */
+        @media (min-width: 768px) {
+            .bot-list {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
             }
-            .add-bot-section {
-                flex-direction: column;
-                align-items: stretch;
+            .run-bar {
+                max-width: 720px;
+                left: 50%;
+                transform: translateX(-50%);
+                border-radius: 20px 20px 0 0;
             }
-            .input-cluster {
-                width: 100%;
-            }
-            .input-cluster input {
-                flex: 1;
-                width: auto;
-                min-width: 150px;
-            }
-            .btn-primary {
-                justify-content: center;
-            }
-            .logo-text h1 {
-                font-size: 1.4rem;
+        }
+
+        @media (min-width: 1024px) {
+            .bot-list {
+                grid-template-columns: repeat(3, 1fr);
             }
         }
     </style>
 </head>
 <body>
-    <div class="dashboard">
-        <!-- header -->
-        <div class="header">
-            <div class="logo-area">
-                <div class="logo-icon">
-                    <i class="fas fa-robot"></i>
-                </div>
-                <div class="logo-text">
-                    <h1>Deriv Bot Dashboard</h1>
-                    <span class="badge"><i class="fas fa-gift" style="margin-right: 5px;"></i>free · unlimited</span>
-                </div>
-            </div>
-            <div class="status-pill">
-                <div class="status-dot"></div>
-                <span>connected · deriv api</span>
+
+    <!-- TOP NAV -->
+    <div class="top-nav">
+        <div class="nav-left">
+            <i class="fas fa-bars menu-icon"></i>
+            <div class="brand">
+                <div class="brand-icon"><i class="fas fa-bolt"></i></div>
+                Pypnex AI
             </div>
         </div>
+        <div class="nav-right">
+            <a href="#" class="login-link">Log in</a>
+            <a href="#" class="signup-btn">Sign up</a>
+        </div>
+    </div>
 
-        <!-- add bot section -->
-        <div class="add-bot-section">
-            <div class="label-group">
-                <i class="fas fa-plus-circle"></i>
-                <div>
-                    <h3>Add your free bot</h3>
-                    <p>Name your Deriv bot (e.g., "RSI master", "MACD cross")</p>
-                </div>
+    <!-- TABS -->
+    <div class="tabs">
+        <div class="tab active"><i class="fas fa-th-large"></i> Free Bots</div>
+        <div class="tab"><i class="fas fa-layer-group"></i> Bulk Trader</div>
+        <div class="tab"><i class="fas fa-chart-line"></i> Dashboard</div>
+        <div class="tab"><i class="fas fa-cog"></i> Settings</div>
+    </div>
+
+    <!-- HERO -->
+    <div class="hero">
+        <h1>Pipnex AI</h1>
+        <h2>Free bots</h2>
+        <p>Load a bot and start trading — no setup, no noise.</p>
+    </div>
+
+    <!-- BOT LIST -->
+    <div class="bot-list">
+
+        <!-- CARD 1 -->
+        <div class="bot-card">
+            <div class="bot-image">
+                <div class="badge-tl">OVER / UNDER</div>
+                <div class="badge-tr">PROTECTED</div>
+                <!-- Replace with real image -->
+                <i class="fas fa-robot robot-art"></i>
             </div>
-            <div class="input-cluster">
-                <input type="text" id="botNameInput" placeholder="Enter bot name..." maxlength="40" autocomplete="off">
-                <button class="btn-primary" id="addBotBtn">
-                    <i class="fas fa-cloud-upload-alt"></i> Add bot
+            <div class="bot-body">
+                <div class="bot-tag">Password required</div>
+                <div class="bot-title">Tradescript Bullets</div>
+                <button class="unlock-btn">
+                    <i class="fas fa-download"></i> Unlock & load
                 </button>
             </div>
         </div>
 
-        <!-- bot list header -->
-        <div class="bot-grid-header">
-            <h2><i class="fas fa-microchip"></i> My Deriv bots</h2>
-            <span class="bot-count" id="botCount">0 bots</span>
+        <!-- CARD 2 -->
+        <div class="bot-card v2">
+            <div class="bot-image">
+                <div class="badge-tl">OVER / UNDER</div>
+                <div class="badge-tr">PROTECTED</div>
+                <i class="fas fa-bolt robot-art"></i>
+            </div>
+            <div class="bot-body">
+                <div class="bot-tag">Free strategy</div>
+                <div class="bot-title">Storm Rider AI</div>
+                <button class="unlock-btn">
+                    <i class="fas fa-download"></i> Unlock & load
+                </button>
+            </div>
         </div>
 
-        <!-- dynamic bot grid -->
-        <div class="bot-grid" id="botGrid">
-            <!-- filled via js, initial empty state will be injected -->
-        </div>
     </div>
 
-    <!-- toast -->
-    <div class="toast-message" id="toast">
-        <i class="fas fa-check-circle"></i> <span id="toastText">Bot added</span>
+    <!-- BOTTOM RUN BAR -->
+    <div class="run-bar">
+        <button class="run-btn">
+            <i class="fas fa-play"></i> Run
+        </button>
+        <div class="speed-pill">
+            <span class="label">EXECUTION</span>
+            <span class="value">FAST</span>
+        </div>
+        <div class="status-area">
+            <div class="status-text">Bot is not running</div>
+            <div class="progress-dots">
+                <div class="dot active"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+        </div>
     </div>
 
     <script>
-        (function(){
-            // --- state & storage ---
-            let bots = [];
+        // Tab switching (visual only)
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+            });
+        });
 
-            // load from localStorage (free persistent storage)
-            function loadBots() {
-                try {
-                    const stored = localStorage.getItem('deriv_free_bots');
-                    if (stored) {
-                        bots = JSON.parse(stored);
-                        // ensure each bot has an id, if not (legacy) assign
-                        bots = bots.map(b => {
-                            if (!b.id) b.id = crypto.randomUUID ? crypto.randomUUID() : Date.now() + Math.random().toString(36);
-                            return b;
-                        });
-                    } else {
-                        // start with a couple of sample bots to demonstrate
-                        bots = [
-                            { id: crypto.randomUUID ? crypto.randomUUID() : '1', name: 'RSI Crossover', created: Date.now() - 86400000 * 2 },
-                            { id: crypto.randomUUID ? crypto.randomUUID() : '2', name: 'MACD Momentum', created: Date.now() - 86400000 * 5 },
-                            { id: crypto.randomUUID ? crypto.randomUUID() : '3', name: 'Bollinger Bounce', created: Date.now() - 86400000 * 1 }
-                        ];
-                    }
-                } catch (e) {
-                    console.warn('localStorage error, using defaults');
-                    bots = [
-                        { id: '1', name: 'RSI Crossover', created: Date.now() - 86400000 * 2 },
-                        { id: '2', name: 'MACD Momentum', created: Date.now() - 86400000 * 5 },
-                    ];
-                }
-                // ensure every bot has an id and created field
-                bots = bots.map(b => {
-                    if (!b.id) b.id = crypto.randomUUID ? crypto.randomUUID() : Date.now() + Math.random().toString(36);
-                    if (!b.created) b.created = Date.now();
-                    return b;
+        // Unlock button demo
+        document.querySelectorAll('.unlock-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                alert('🔒 This demo bot requires a password to unlock. Add your own bot logic here.');
+            });
+        });
+
+        // Run button demo
+        document.querySelector('.run-btn').addEventListener('click', () => {
+            const status = document.querySelector('.status-text');
+            const dots = document.querySelectorAll('.dot');
+            if (status.textContent.includes('not running')) {
+                status.textContent = 'Bot is running…';
+                dots.forEach((d, i) => {
+                    if (i === 1) d.classList.add('active');
+                    if (i === 2) d.classList.remove('active');
                 });
-                renderBots();
-            }
-
-            function saveBots() {
-                try {
-                    localStorage.setItem('deriv_free_bots', JSON.stringify(bots));
-                } catch (e) {
-                    console.warn('Could not save to localStorage');
-                }
-            }
-
-            // --- render bot cards ---
-            function renderBots() {
-                const grid = document.getElementById('botGrid');
-                const countSpan = document.getElementById('botCount');
-                if (!grid) return;
-
-                // update counter
-                countSpan.textContent = bots.length + (bots.length === 1 ? ' bot' : ' bots');
-
-                if (bots.length === 0) {
-                    grid.innerHTML = `
-                        <div class="empty-state">
-                            <i class="fas fa-robot"></i>
-                            <p>No bots yet. Add your first Deriv bot above — it's free!</p>
-                            <div class="small-note">Each bot gets a unique ID & runs on your account.</div>
-                        </div>
-                    `;
-                    return;
-                }
-
-                // sort by creation date (newest first)
-                const sorted = [...bots].sort((a, b) => (b.created || 0) - (a.created || 0));
-
-                let html = '';
-                sorted.forEach(bot => {
-                    // format relative time or simple date
-                    const createdDate = bot.created ? new Date(bot.created) : new Date();
-                    const dateStr = createdDate.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
-                    const timeStr = createdDate.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
-
-                    // escape bot name for safety
-                    const safeName = bot.name.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-
-                    html += `
-                        <div class="bot-card" data-bot-id="${bot.id}">
-                            <div class="card-header">
-                                <div class="bot-name">
-                                    <i class="fas fa-bolt"></i>
-                                    <h3>${safeName}</h3>
-                                </div>
-                                <div class="bot-actions">
-                                    <button class="icon-btn delete-btn" data-id="${bot.id}" title="Delete bot">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="bot-meta">
-                                <span><i class="fas fa-fingerprint"></i> ID: ${bot.id.slice(0, 8)}…</span>
-                                <span><i class="far fa-calendar-alt"></i> ${dateStr} ${timeStr}</span>
-                                <span><i class="fas fa-circle" style="color: #00d4aa; font-size: 0.5rem;"></i> active</span>
-                            </div>
-                        </div>
-                    `;
-                });
-                grid.innerHTML = html;
-
-                // attach delete listeners to all delete buttons
-                document.querySelectorAll('.delete-btn').forEach(btn => {
-                    btn.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        const id = btn.getAttribute('data-id');
-                        if (id) deleteBot(id);
-                    });
+            } else {
+                status.textContent = 'Bot is not running';
+                dots.forEach((d, i) => {
+                    if (i === 0) d.classList.add('active');
+                    else d.classList.remove('active');
                 });
             }
+        });
+    </script>
 
-            // --- add bot ---
-            function addBot() {
-                const input = document.getElementById('botNameInput');
-                const name = input.value.trim();
-
-                if (!name) {
-                    showToast('Please enter a bot name', '⚠️');
-                    input.focus();
-  
+</body>
+</html>
