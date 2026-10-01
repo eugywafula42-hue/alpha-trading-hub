@@ -1,23 +1,233 @@
-<!doctype html>
-<html>
-    <head>
-        <title>Deriv</title>
-        <meta charset="utf-8" />
-        <script>
-            try {
-                // we check if we can access the top.location, if we can't it will throw an error
-                // and this means this front-channel is not rendered on the same window as the application which is logging out
-                let isSameOrigin = top.location.hostname === self.location.hostname;
-            } catch (err) {
-                localStorage.removeItem('accountsList');
-                localStorage.removeItem('clientAccounts');
-                localStorage.removeItem('callback_token');
-                localStorage.removeItem('authToken');
-                localStorage.removeItem('active_loginid');
-                localStorage.removeItem('client.accounts');
-            }
-        </script>
-    </head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AlphaTrade Hub · Authenticating…</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%2310B981'/%3E%3Cpath d='M 20 85 L 35 70 L 50 77 L 65 55 L 80 40' stroke='white' stroke-width='6' stroke-linecap='round' fill='none'/%3E%3C/svg%3E">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { height: 100%; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: radial-gradient(circle at 50% 40%, #0d1b2a 0%, #050a12 100%);
+            color: #e5eef7;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 2rem;
+            text-align: center;
+        }
 
-    <body></body>
+        .logo-wrap {
+            width: 90px;
+            height: 90px;
+            background: linear-gradient(135deg, #10B981, #047857);
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 20px 45px -15px #10b98180;
+            margin-bottom: 24px;
+            animation: pop 0.5s ease-out;
+        }
+
+        @keyframes pop {
+            0% { transform: scale(0.7); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .logo-wrap svg { width: 52px; height: 52px; }
+
+        h1 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            background: linear-gradient(90deg, #A7F3D0, #10B981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 6px;
+        }
+
+        .sub {
+            color: #7c8ea3;
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            margin-bottom: 32px;
+        }
+
+        .spinner {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: 3px solid #1e2e3e;
+            border-top-color: #10B981;
+            animation: spin 0.9s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .status {
+            font-size: 0.95rem;
+            color: #b9c7d4;
+            font-weight: 500;
+            min-height: 22px;
+        }
+
+        .status.err { color: #f87171; }
+        .status.ok  { color: #34d399; }
+
+        .card {
+            background: rgba(20, 33, 48, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid #22303f;
+            border-radius: 20px;
+            padding: 36px 32px;
+            max-width: 420px;
+            width: 100%;
+            box-shadow: 0 30px 60px -20px rgba(0,0,0,0.7);
+        }
+
+        .footnote {
+            margin-top: 26px;
+            font-size: 0.75rem;
+            color: #4c5d70;
+            letter-spacing: 0.3px;
+        }
+
+        .footnote strong { color: #10B981; font-weight: 700; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <div class="logo-wrap">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none">
+                <path d="M 20 90 L 40 70 L 55 78 L 75 55 L 100 35"
+                      stroke="#ffffff" stroke-width="7"
+                      stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M 88 35 L 100 35 L 100 47"
+                      stroke="#ffffff" stroke-width="7"
+                      stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="20" cy="90" r="4.5" fill="#A7F3D0"/>
+                <circle cx="100" cy="35" r="4.5" fill="#A7F3D0"/>
+            </svg>
+        </div>
+
+        <h1>AlphaTrade Hub</h1>
+        <div class="sub">SECURE AUTHENTICATION</div>
+
+        <div class="spinner" id="spinner"></div>
+        <div class="status" id="status">Verifying your Deriv session…</div>
+
+        <div class="footnote">
+            Powered by <strong>Deriv API</strong> · OAuth 2.0
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            const statusEl = document.getElementById('status');
+            const spinnerEl = document.getElementById('spinner');
+
+            function setStatus(text, type) {
+                statusEl.textContent = text;
+                statusEl.className = 'status' + (type ? ' ' + type : '');
+            }
+
+            function clearStaleTokens() {
+                const keys = [
+                    'accountsList',
+                    'clientAccounts',
+                    'callback_token',
+                    'authToken',
+                    'active_loginid',
+                    'deriv_accounts',
+                    'deriv_token'
+                ];
+                keys.forEach(k => {
+                    try { localStorage.removeItem(k); } catch (e) {}
+                });
+            }
+
+            try {
+                // --- Same-origin check (Deriv's front-channel security) ---
+                const isSameOrigin = top.location.hostname === self.location.hostname;
+
+                if (!isSameOrigin) {
+                    // Iframe loaded from a different origin → clear stale tokens
+                    clearStaleTokens();
+                    setStatus('Cross-origin session detected. Tokens cleared.', 'err');
+                    spinnerEl.style.display = 'none';
+                    return;
+                }
+
+                // --- Extract token from URL (if present) ---
+                const params = new URLSearchParams(window.location.search);
+                const token = params.get('token1') || params.get('token') || params.get('authToken');
+                const acct  = params.get('acct1') || params.get('acct') || params.get('loginid');
+
+                if (token) {
+                    // Save for the main app to pick up
+                    try {
+                        localStorage.setItem('callback_token', token);
+                        if (acct) localStorage.setItem('active_loginid', acct);
+                    } catch (e) {}
+
+                    setStatus('Login successful. Redirecting to dashboard…', 'ok');
+                    spinnerEl.style.borderTopColor = '#34d399';
+
+                    // Notify parent window if inside iframe
+                    try {
+                        if (window.opener) {
+                            window.opener.postMessage({
+                                type: 'deriv-auth',
+                                token: token,
+                                acct: acct
+                            }, '*');
+                        }
+                        if (window.parent !== window) {
+                            window.parent.postMessage({
+                                type: 'deriv-auth',
+                                token: token,
+                                acct: acct
+                            }, '*');
+                        }
+                    } catch (e) {}
+
+                    // Redirect the user back to the app
+                    setTimeout(() => {
+                        const redirect = params.get('redirect') || '/';
+                        if (window.opener || window.parent !== window) {
+                            // Stay if iframe, just show success
+                            setStatus('Session linked. You can close this window.', 'ok');
+                        } else {
+                            window.location.href = redirect;
+                        }
+                    }, 1200);
+
+                } else {
+                    // No token — could be a fresh load or an error page
+                    setStatus('Waiting for Deriv login…', '');
+                    // Optional: auto-redirect to Deriv OAuth
+                    // const APP_ID = 'YOUR_APP_ID';
+                    // const REDIRECT = encodeURIComponent(window.location.origin + window.location.pathname);
+                    // window.location.href = `https://oauth.deriv.com/oauth2/authorize?app_id=${APP_ID}&l=en&redirect_uri=${REDIRECT}`;
+                }
+
+            } catch (err) {
+                // Cross-origin (top.location access blocked) → clear tokens
+                clearStaleTokens();
+                spinnerEl.style.display = 'none';
+                setStatus('Session expired. Please log in again.', 'err');
+                console.error('Front-channel error:', err);
+            }
+        })();
+    </script>
+
+</body>
 </html>
