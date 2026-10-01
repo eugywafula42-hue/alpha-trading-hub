@@ -1,1 +1,94 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"><path d="M0 9.333A9.333 9.333 0 0 1 9.333 0h5.334A9.333 9.333 0 0 1 24 9.333v5.334A9.333 9.333 0 0 1 14.667 24H9.333A9.333 9.333 0 0 1 0 14.667V9.333Z" fill="#FF444F"/><path d="m15.056 4.972-.774 4.389h-2.686c-2.507 0-4.895 2.03-5.338 4.537l-.188 1.066c-.44 2.507 1.232 4.537 3.738 4.537h2.24c1.827 0 3.567-1.479 3.889-3.305L18 4.499l-2.944.473Zm-1.906 10.81c-.1.564-.607 1.023-1.171 1.023h-1.362c-1.126 0-1.88-.914-1.682-2.043l.117-.665c.2-1.126 1.275-2.042 2.402-2.042h2.353l-.657 3.727Z" fill="#fff"/></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 140" width="520" height="140" fill="none">
+  <defs>
+    <!-- Green gradient for the icon background -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10B981"/>
+      <stop offset="100%" stop-color="#047857"/>
+    </linearGradient>
+
+    <!-- Light glow -->
+    <linearGradient id="glowGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#34D399" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#10B981" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- Text gradient -->
+    <linearGradient id="textGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#065F46"/>
+      <stop offset="100%" stop-color="#10B981"/>
+    </linearGradient>
+
+    <!-- Drop shadow -->
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+      <feOffset dx="0" dy="4" result="offsetblur"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.15"/>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Rounded square icon -->
+  <g filter="url(#softShadow)">
+    <rect x="10" y="20" width="100" height="100" rx="24" fill="url(#bgGrad)"/>
+
+    <!-- Inner subtle highlight -->
+    <rect x="14" y="24" width="92" height="92" rx="20" fill="none" stroke="#ffffff" stroke-opacity="0.15" stroke-width="1.5"/>
+
+    <!-- Chart line (upward trend) -->
+    <path d="M 30 90 L 45 75 L 60 82 L 75 60 L 90 45"
+          stroke="#ffffff"
+          stroke-width="5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          fill="none"/>
+
+    <!-- Arrow head on the chart -->
+    <path d="M 78 45 L 90 45 L 90 57"
+          stroke="#ffffff"
+          stroke-width="5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          fill="none"/>
+
+    <!-- Small dot at the start -->
+    <circle cx="30" cy="90" r="3.5" fill="#A7F3D0"/>
+
+    <!-- Small dot at peak -->
+    <circle cx="90" cy="45" r="3.5" fill="#A7F3D0"/>
+  </g>
+
+  <!-- Brand name: Alpha Trading Hub -->
+  <g filter="url(#softShadow)">
+    <!-- "Alpha" in dark green -->
+    <text x="130" y="72"
+          font-family="'Inter', 'Segoe UI', -apple-system, sans-serif"
+          font-size="34"
+          font-weight="800"
+          fill="#065F46"
+          letter-spacing="-0.5">Alpha</text>
+
+    <!-- "Trading" in gradient -->
+    <text x="130" y="105"
+          font-family="'Inter', 'Segoe UI', -apple-system, sans-serif"
+          font-size="20"
+          font-weight="600"
+          fill="url(#textGrad)"
+          letter-spacing="3">TRADING</text>
+
+    <!-- "HUB" pill on the right -->
+    <rect x="272" y="80" width="70" height="30" rx="8" fill="#065F46"/>
+    <text x="307" y="101"
+          font-family="'Inter', 'Segoe UI', -apple-system, sans-serif"
+          font-size="15"
+          font-weight="800"
+          fill="#A7F3D0"
+          letter-spacing="2"
+          text-anchor="middle">HUB</text>
+  </g>
+</svg>
