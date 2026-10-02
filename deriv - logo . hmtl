@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deriv Logo Profile Picture</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #1a1a1a;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .profile-container {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle at center, #6b6b6b 0%, #3a3a3a 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            border-radius: 50%; /* Makes it a circle for profile picture */
+            box-shadow: inset 0 0 50px rgba(0,0,0,0.5), 0 10px 30px rgba(0,0,0,0.8);
+        }
+
+        /* Subtle texture overlay */
+        .profile-container::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+            pointer-events: none;
+        }
+
+        /* --- 3D D Symbol --- */
+        .logo-symbol {
+            position: relative;
+            width: 280px;
+            height: 280px;
+            margin-bottom: 10px;
+            margin-top: -20px;
+        }
+
+        .d-shape {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            /* Red Gradient */
+            background: linear-gradient(135deg, #a32a2a 0%, #cc3333 40%, #8a1c1c 100%);
+            /* Create the D shape using clip-path */
+            clip-path: polygon(
+                30% 0%, 60% 0%, 85% 15%, 100% 40%, 
+                100% 60%, 85% 85%, 60% 100%, 30% 100%, 
+                60% 80%, 80% 65%, 85% 50%, 80% 35%, 
+                60% 20%, 30% 20%, 30% 0%
+            );
+            /* 3D depth effect using box-shadow and drop-shadow */
+            filter: drop-shadow(4px 4px 5px rgba(0,0,0,0.6)) 
+                    drop-shadow(-1px -1px 2px rgba(255,255,255,0.2));
+        }
+
+        .d-shape::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.15), rgba(0,0,0,0.4));
+            clip-path: inherit;
+        }
+
+        /* The < / > code icons inside */
+        .code-icons {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 10;
+            filter: drop-shadow(2px 2px 3px rgba(0,0,0,0.8));
+        }
+
+        .code-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #2b2b2b, #111);
+            clip-path: polygon(100% 0, 0 50%, 100% 100%, 80% 50%);
+        }
+
+        .code-icon.right {
+            clip-path: polygon(0 0, 100% 50%, 0 100%, 20% 50%);
+        }
+
+        .slash {
+            width: 6px;
+            height: 55px;
+            background: linear-gradient(to bottom, #444, #111);
+            transform: rotate(30deg);
+            box-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+        }
+
+        /* --- Text --- */
+        .logo-text {
+            display: flex;
+            align-items: flex-end;
+            gap: 6px;
+            font-family: 'Arial Black', 'Impact', sans-serif;
+            font-size: 80px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            transform: scaleY(0.9);
+            margin-top: 10px;
+            filter: drop-shadow(4px 4px 5px rgba(0,0,0,0.7));
+        }
+
+        .letter {
+            position: relative;
+            color: #222;
+            background: linear-gradient(180deg, #3a3a3a 0%, #111 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 1px 1px 0px rgba(255,255,255,0.1);
+        }
+
+        .letter.red {
+            background: linear-gradient(180deg, #cc3333 0%, #7a1515 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Specific letter adjustments for the D and A */
+        .letter-d {
+            font-size: 85px;
+            margin-right: -2px;
+        }
+
+        .letter-a {
+            font-size: 55px; /* A is smaller */
+            margin-left: 2px;
+            background: linear-gradient(180deg, #cc3333 0%, #7a1515 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Fake 3D edge for letters */
+        .letter::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            z-index: -1;
+            color: #555;
+            -webkit-text-fill-color: #555;
+            background: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="profile-container">
+        <!-- The D symbol -->
+        <div class="logo-symbol">
+            <div class="d-shape"></div>
+            <div class="code-icons">
+                <div class="code-icon left"></div>
+                <div class="slash"></div>
+                <div class="code-icon right"></div>
+            </div>
+        </div>
+
+        <!-- The text DERIV -->
+        <div class="logo-text">
+            <span class="letter red letter-d" data-text="D">D</span>
+            <span class="letter" data-text="E">E</span>
+            <span class="letter" data-text="R">R</span>
+            <span class="letter" data-text="I">I</span>
+            <span class="letter" data-text="V">V</span>
+            <span class="letter red letter-a" data-text="A">A</span>
+        </div>
+    </div>
+
+</body>
+</html>
